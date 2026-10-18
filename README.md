@@ -61,6 +61,20 @@ Margen financiero bruto = margen financiero bruto / ingresos financieros. Gasto 
 - **Mayo 2026** muestra un salto del margen en todo el sistema (88.9% en el resto de la banca), no solo en Mibanco, por lo que no es un efecto propio de esta entidad.
 - *Hipótesis (no verificada con estos datos):* margen mayor y gasto operativo mayor es un patrón coherente con un modelo de microfinanzas, con muchos créditos pequeños y una red de agencias amplia.
 
+## Cómo adaptarlo a otra entidad
+
+Las consultas no dependen de Mibanco: la base contiene las 24 entidades y el nombre de la entidad analizada es lo único que cambia.
+
+1. Ver los nombres exactos disponibles (deben escribirse igual):
+   ```sql
+   SELECT nombre FROM entidades ORDER BY nombre;
+   ```
+2. En `consulta1_mibanco_flujo_mensual.sql` y `consulta1b.sql`, cambiar `'Mibanco'` en la línea `WHERE e.nombre = 'Mibanco'`.
+3. En `consulta2_comparacion.sql`, reemplazar `'Mibanco'` por la entidad elegida en las 6 líneas donde aparece (3 con `=` y 3 con `<>`). La entidad analizada pasa a compararse con el resto de la banca.
+4. Mantener las exclusiones de `acum` (filas "Total...", BCP con sucursales en el exterior y Banco Efectiva).
+
+Ejemplo: con `'Interbank'`, el margen financiero bruto sobre ingresos queda por debajo del resto de la banca en todos los meses analizados (por ejemplo, 72.5% frente a 75.0% en octubre 2025), pero su gasto administrativo sobre ingresos también es menor (30.4% frente a 35.0%).
+
 ## Limitaciones
 
 - Solo 12 meses y solo banca múltiple: no incluye cajas municipales ni financieras, que son los competidores directos de Mibanco en microfinanzas.
